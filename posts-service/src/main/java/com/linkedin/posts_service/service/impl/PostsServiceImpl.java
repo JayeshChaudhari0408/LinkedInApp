@@ -1,0 +1,50 @@
+package com.linkedin.posts_service.service.impl;
+
+import com.linkedin.posts_service.dto.PostsCreateRequestDto;
+import com.linkedin.posts_service.dto.PostsDto;
+import com.linkedin.posts_service.entity.Post;
+import com.linkedin.posts_service.exception.ResourceNotFoundException;
+import com.linkedin.posts_service.repository.PostsRepository;
+import com.linkedin.posts_service.service.PostsService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+@Service
+@RequiredArgsConstructor
+@Slf4j
+public class PostsServiceImpl implements PostsService {
+
+    private final PostsRepository postsRepository;
+    private final ModelMapper modelMapper;
+
+    @Override
+    public PostsDto createPost(PostsCreateRequestDto postsCreateRequestDto, Long userId) {
+        Post post = modelMapper.map(postsCreateRequestDto,Post.class);
+        post.setUserId(userId);
+
+        Post savedPost = postsRepository.save(post);
+        return modelMapper.map(savedPost, PostsDto.class);
+    }
+
+    @Override
+    public PostsDto getPostById(Long postId) {
+        Post post = postsRepository.findById(postId)
+                 .orElseThrow(() -> new ResourceNotFoundException("Post not found with id: "+postId));
+
+        return modelMapper.map(post,PostsDto.class);
+    }
+
+    @Override
+    public List<PostsDto> getAllPostsByUser(Long userId) {
+        List<Post> posts = postsRepository.findByUserId(userId);
+        return posts
+                .stream()
+                .map((element)->modelMapper.map(element,PostsDto.class))
+                .collect(Collectors.toList());
+    }
+}
