@@ -1,5 +1,6 @@
 package com.linkedin.connection_service.service.impl;
 
+import com.linkedin.connection_service.auth.UserContextHolder;
 import com.linkedin.connection_service.entity.Person;
 import com.linkedin.connection_service.repository.PersonRepository;
 import com.linkedin.connection_service.service.ConnectionService;
@@ -17,7 +18,8 @@ public class ConnectionServiceImpl implements ConnectionService {
     private final PersonRepository personRepository;
 
     @Override
-    public List<Person> getFirstDegreeConnection(Long userId) {
+    public List<Person> getFirstDegreeConnection() {
+        Long userId = UserContextHolder.getCurrentUserId();
 
         return personRepository.getFirstDegreeConnection(userId);
     }

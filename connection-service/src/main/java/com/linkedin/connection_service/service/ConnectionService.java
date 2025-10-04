@@ -6,6 +6,6 @@ import java.util.List;
 
 public interface ConnectionService {
 
-    List<Person> getFirstDegreeConnection(Long userId);
+    List<Person> getFirstDegreeConnection();
 
 }
