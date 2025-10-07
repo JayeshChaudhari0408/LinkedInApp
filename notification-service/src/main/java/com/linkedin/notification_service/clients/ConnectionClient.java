@@ -1,8 +1,9 @@
-package com.linkedin.posts_service.clients;
+package com.linkedin.notification_service.clients;
 
-import com.linkedin.posts_service.dto.PersonDto;
+import com.linkedin.notification_service.dto.PersonDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 
 import java.util.List;
 
@@ -10,6 +11,6 @@ import java.util.List;
 public interface ConnectionClient {
 
     @GetMapping("/core/first-degree")
-     List<PersonDto> getFirstConnections();
+     List<PersonDto> getFirstConnections(@RequestHeader("X-User-Id") Long userId);
 
 }

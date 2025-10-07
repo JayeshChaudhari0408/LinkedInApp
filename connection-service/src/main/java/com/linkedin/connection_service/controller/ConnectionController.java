@@ -4,9 +4,7 @@ import com.linkedin.connection_service.entity.Person;
 import com.linkedin.connection_service.service.ConnectionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -20,5 +18,20 @@ public class ConnectionController {
     @GetMapping("/first-degree")
     public ResponseEntity<List<Person>> getFirstConnections() {
         return ResponseEntity.ok(connectionService.getFirstDegreeConnection());
+    }
+
+    @PostMapping("/request/{userId}")
+    public ResponseEntity<Boolean> sendConnectionRequest(@PathVariable Long userId) {
+        return ResponseEntity.ok(connectionService.sendConnectionRequest(userId));
+    }
+
+    @PostMapping("/accept/{userId}")
+    public ResponseEntity<Boolean> acceptConnectionRequest(@PathVariable Long userId) {
+        return ResponseEntity.ok(connectionService.acceptConnectionRequest(userId));
+    }
+
+    @PostMapping("/reject/{userId}")
+    public ResponseEntity<Boolean> rejectConnectionRequest(@PathVariable Long userId) {
+        return ResponseEntity.ok(connectionService.rejectConnectionRequest(userId));
     }
 }
